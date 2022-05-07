@@ -1,6 +1,28 @@
 import urequests
+from machine import Pin, ADC
+from time import ticks_us, ticks_ms, ticks_diff
 
-def notify(fcm_server_key):
+RECEIVER_PIN = 0
+SIGNAL_TRESHOLD = 700
+BIT_PERIOD = 750
+
+previousValue = 0
+currentValue = 0
+bitStartTime = 0
+counting = False
+times = 0
+timeLastNotification = 0
+
+signal_recv_pin = Pin(0) # Analog read on A0
+
+fcm_file = open("fcm_creds.txt", "r")
+fcm_creds = fcm_file.read()
+fcm_creds = fcm_creds.split(";") 
+fcm_url = fcm_creds[0]
+fcm_server_key = fcm_creds[1]
+
+
+def notify(fcm_project_key,fcm_server_key):
   print( "notify") 
   headers = {
   "Content-Type": "application/json",
@@ -17,6 +39,15 @@ def notify(fcm_server_key):
      }
   }"""
 
-  response = urequests.post("https://fcm.googleapis.com/v1/projects/doorbell-3f305/messages:send", data=payload, headers=headers)      
+  response = urequests.post("https://fcm.googleapis.com/v1/projects/{0}/messages:send".format(fcm_project_key), data=payload, headers=headers)      
   print(response.text)
-notify()
+
+
+def loop():
+  while True:
+      pot_value = signal_recv_pin.read()
+      print(pot_value)
+
+
+
+loop();
