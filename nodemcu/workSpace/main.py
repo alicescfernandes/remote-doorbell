@@ -1,6 +1,7 @@
 import urequests
 from machine import Pin, ADC
-from time import ticks_us, ticks_ms, ticks_diff
+import time
+from machine import ADC
 
 RECEIVER_PIN = 0
 SIGNAL_TRESHOLD = 700
@@ -13,41 +14,67 @@ counting = False
 times = 0
 timeLastNotification = 0
 
-signal_recv_pin = Pin(0) # Analog read on A0
+signal_recv_pin = ADC(0) # Analog read on A0
 
 fcm_file = open("fcm_creds.txt", "r")
-fcm_creds = fcm_file.read()
-fcm_creds = fcm_creds.split(";") 
-fcm_url = fcm_creds[0]
-fcm_server_key = fcm_creds[1]
+fcm_server_key = fcm_file.read()
 
-
-def notify(fcm_project_key,fcm_server_key):
-  print( "notify") 
+def notify(api_key):  
   headers = {
-  "Content-Type": "application/json",
-  "Authorization": "key="+fcm_server_key
+    "Authorization": "api_key="+api_key
   }
-
-  payload = """{
-     "message":{
-       "topic" : "doorbell",
-        "notification":{
-          "body":"Someone is at the doorbell",
-          "title":"The doorbell ringed!!"
-        }
-     }
-  }"""
-
-  response = urequests.post("https://fcm.googleapis.com/v1/projects/{0}/messages:send".format(fcm_project_key), data=payload, headers=headers)      
+  
+  payload = "title=Your%20Title&message=Your%20Message&icon=http://yourwebsite.com/icon.png&url=https://yourwebsite.com"
+  
+  response = urequests.post("https://api.pushalert.co/rest/v1/send", data=payload, headers=headers)      
   print(response.text)
-
-
+  
+  
+def detectHigh():
+  global previousValue
+  global currentValue 
+  global bitStartTime 
+  global counting
+  global times
+  global timeLastNotification
+  global fcm_server_key
+  
+  reading = signal_recv_pin.read()
+  previousValue = currentValue
+  currentValue = reading
+  
+  # From low to high
+  if(previousValue < SIGNAL_TRESHOLD and currentValue > SIGNAL_TRESHOLD):
+    bitStartTime = time.ticks_us()
+    counting = True
+    
+  # From high to low
+  elif(counting and currentValue  < SIGNAL_TRESHOLD and previousValue > SIGNAL_TRESHOLD): # from high to low
+    calculatedBitPeriod = time.ticks_us() - bitStartTime
+    bitStartTime = time.ticks_us()
+    counting = False
+    print(calculatedBitPeriod)
+    if(calculatedBitPeriod > BIT_PERIOD - 50  and calculatedBitPeriod < BIT_PERIOD + 50  ):
+      times = times +1
+    else:
+      times = 0
+      
+    
+  # Detect ringing and trigger notification
+  if(times >= 3):
+    timeDiff = time.ticks_diff(ticks_ms(), timeLastNotification)
+    timeInSeconds = time.timeDiff / 1000
+    timeLastNotification = time.ticks_ms()
+    times = 0
+    if(timeInSeconds > 15.0): # Needs to wait 15s between dings to trigger
+      notify(fcm_server_key)
+  
 def loop():
   while True:
-      pot_value = signal_recv_pin.read()
-      print(pot_value)
+    detectHigh()
+    
+loop()
 
 
 
-loop();
+

@@ -15,6 +15,7 @@ unsigned int timeLastNotification = 0;
 void setup() {
   Serial.begin(9600);
   pinMode(RECEIVER_PIN, INPUT);
+  timeLastNotification = millis();
 }
 
 void detectHigh(){
@@ -31,15 +32,15 @@ void detectHigh(){
     unsigned int calculatedBitPeriod = micros() - bitStartTime;
     bitStartTime = micros();
     counting = false;
-    
-    if(calculatedBitPeriod > BIT_PERIOD - 50  and calculatedBitPeriod < BIT_PERIOD + 50  ){
+  
+    if(calculatedBitPeriod > BIT_PERIOD - 80  and calculatedBitPeriod < BIT_PERIOD + 80  ){
        times = times +1;
     }else{
       times = 0;
     }  
     
   }
-
+  
   if(times >= 3){
     unsigned int timeDiff = (millis()- timeLastNotification );
     float timeInSeconds = timeDiff / 1000;
@@ -50,7 +51,7 @@ void detectHigh(){
     }
     
   }
-
+  
 }
 
 void detectHighInterrupt(){
