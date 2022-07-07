@@ -13,7 +13,7 @@ gc.collect()
 file = open("creds.txt", "r")
 
 code_creds = file.read()
-
+led = Pin(2, Pin.OUT)
 
 code_creds = code_creds.split(";")
 
@@ -37,7 +37,8 @@ print('Connection successful')
 print("Hey");
 print(station.ifconfig())
 
-led = Pin(2, Pin.OUT)
+led.on()
+
 
 
 

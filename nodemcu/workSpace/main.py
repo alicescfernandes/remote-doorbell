@@ -2,19 +2,25 @@ import urequests
 from machine import Pin, ADC
 import time
 from machine import ADC
+import os
 
 RECEIVER_PIN = 0
 SIGNAL_TRESHOLD = 700
 BIT_PERIOD = 750
-
+board = os.uname().sysname
 previousValue = 0
 currentValue = 0
 bitStartTime = 0
 counting = False
 times = 0
 timeLastNotification = 0
+signal_recv_pin = None
 
-signal_recv_pin = ADC(0) # Analog read on A0
+if board == 'esp32':
+  signal_recv_pin = ADC(Pin(34)) # Analog read on 34
+else:
+  signal_recv_pin = ADC(0)
+
 
 fcm_file = open("fcm_creds.txt", "r")
 fcm_server_key = fcm_file.read()
@@ -70,10 +76,12 @@ def detectHigh():
       notify(fcm_server_key)
   
 def loop():
+  print("running main");
   while True:
     detectHigh()
     
 loop()
+
 
 
 
