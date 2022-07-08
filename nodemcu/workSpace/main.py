@@ -1,7 +1,7 @@
 import urequests
 from machine import Pin, ADC
+
 import time
-from machine import ADC
 import os
 
 RECEIVER_PIN = 0
@@ -22,8 +22,8 @@ else:
   signal_recv_pin = ADC(0)
 
 
-fcm_file = open("fcm_creds.txt", "r")
-fcm_server_key = fcm_file.read()
+fcm_file = open("onesignal_cred.txt", "r")
+onesignal_key = fcm_file.read()
 
 def notify(api_key):  
   headers = {
@@ -35,6 +35,19 @@ def notify(api_key):
   response = urequests.post("https://api.pushalert.co/rest/v1/send", data=payload, headers=headers)      
   print(response.text)
   
+
+def notifyOneSignal(api_key):  
+  headers = {
+    "Authorization": "Basic " + api_key,
+    "Content-Type": "application/json",
+    "Aceppt": "application/json"
+  }
+  
+  payload = '{ "app_id": "07507034-5d1c-4c71-b4d9-e37a5bee0080", "included_segments": ["Subscribed Users"], "contents": {"en": "Someone is at the door"}, "name": "INTERNAL_CAMPAIGN_NAME" }'
+
+  response = urequests.post("https://onesignal.com/api/v1/notifications", data=payload, headers=headers)      
+  print(response.text)
+  
   
 def detectHigh():
   global previousValue
@@ -43,7 +56,7 @@ def detectHigh():
   global counting
   global times
   global timeLastNotification
-  global fcm_server_key
+  global onesignal_key
   
   reading = signal_recv_pin.read()
   previousValue = currentValue
@@ -68,12 +81,14 @@ def detectHigh():
     
   # Detect ringing and trigger notification
   if(times >= 3):
-    timeDiff = time.ticks_diff(ticks_ms(), timeLastNotification)
-    timeInSeconds = time.timeDiff / 1000
+    timeDiff = time.ticks_diff(time.ticks_ms(), timeLastNotification)
+    timeInSeconds = timeDiff / 1000
     timeLastNotification = time.ticks_ms()
     times = 0
     if(timeInSeconds > 15.0): # Needs to wait 15s between dings to trigger
-      notify(fcm_server_key)
+      print("Sending notification");
+
+      # notifyOneSignal(onesignal_key)
   
 def loop():
   print("running main");
