@@ -3,17 +3,7 @@
   <head>
     <!-- PushAlert -->
 <script type="text/javascript">
-  console.log(1)
-  if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js', {scope: '/'})
-  .then(function(reg) {
-    // registration worked
-    console.log('Registration succeeded. Scope is ' + reg.scope);
-  }).catch(function(error) {
-    // registration failed
-    console.log('Registration failed with ' + error);
-  });
-}
+
 
         (function(d, t) {
                 var g = d.createElement(t),
@@ -24,6 +14,16 @@
 </script>
 <!-- End PushAlert -->
   
+    
+    <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+<script>
+  window.OneSignal = window.OneSignal || [];
+  OneSignal.push(function() {
+    OneSignal.init({
+      appId: "07507034-5d1c-4c71-b4d9-e37a5bee0080",
+    });
+  });
+</script>
   </head>
 <body>
 
