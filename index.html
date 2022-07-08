@@ -5,7 +5,7 @@
 <script type="text/javascript">
   console.log(1)
   if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js', {scope: '/'})
+  navigator.serviceWorker.register('/remote-doorbell/sw.js', {scope: '/remote-doorbell'})
   .then(function(reg) {
     // registration worked
     console.log('Registration succeeded. Scope is ' + reg.scope);
