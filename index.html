@@ -5,7 +5,7 @@
 <script type="text/javascript">
   console.log(1)
   if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/remote-doorbell/sw.js', {scope: '/remote-doorbell/'})
+  navigator.serviceWorker.register('/sw.js', {scope: /'})
   .then(function(reg) {
     // registration worked
     console.log('Registration succeeded. Scope is ' + reg.scope);
@@ -14,19 +14,17 @@
     console.log('Registration failed with ' + error);
   });
 }
-      
 <!-- PushAlert -->
 <script type="text/javascript">
         (function(d, t) {
                 var g = d.createElement(t),
                 s = d.getElementsByTagName(t)[0];
-                g.src = "https://cdn.pushalert.co/integrate_f867bfc9fda95aea5dbf3bcd8d1783ad.js";
+                g.src = "https://cdn.pushalert.co/integrate_b3f0bc1956fe90406c97745e09645270.js";
                 s.parentNode.insertBefore(g, s);
         }(document, "script"));
 </script>
 <!-- End PushAlert -->
-</script>
-<!-- End PushAlert -->
+  
   </head>
 <body>
 
