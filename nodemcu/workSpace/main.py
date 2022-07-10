@@ -22,8 +22,10 @@ else:
   signal_recv_pin = ADC(0)
 
 
-fcm_file = open("onesignal_cred.txt", "r")
-onesignal_key = fcm_file.read()
+os_creds = open("onesignal_creds.txt", "r").split(";")
+
+os_key = os_creds[0]
+os_app_id = os_creds[1]
 
 def notify(api_key):  
   headers = {
@@ -43,7 +45,7 @@ def notifyOneSignal(api_key):
     "Aceppt": "application/json"
   }
   
-  payload = '{ "app_id": "07507034-5d1c-4c71-b4d9-e37a5bee0080", "included_segments": ["Subscribed Users"], "contents": {"en": "Someone is at the door"}, "name": "INTERNAL_CAMPAIGN_NAME" }'
+  payload = '{ "app_id": "'+os_app_id+'", "included_segments": ["Subscribed Users"], "contents": {"en": "Someone is at the door"}, "name": "INTERNAL_CAMPAIGN_NAME" }'
 
   response = urequests.post("https://onesignal.com/api/v1/notifications", data=payload, headers=headers)      
   print(response.text)
@@ -87,7 +89,6 @@ def detectHigh():
     times = 0
     if(timeInSeconds > 15.0): # Needs to wait 15s between dings to trigger
       print("Sending notification");
-
       # notifyOneSignal(onesignal_key)
   
 def loop():
