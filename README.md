@@ -29,9 +29,9 @@ Remote Doorbell: Hacking my doorbell into IoT
 
 # Sofware
 
-# Receiver
+## Receiver
 - OneSignal App 
 
-# Web
+## Web
 - OneSignal App
 - Vercel for Webpush
