@@ -1,15 +1,5 @@
 # remote-doorbell
 Remote Doorbell: Hacking my doorbell into IoT
-
-
-# TODO:
-- [ ] Add converter to verify if the board is able to read the signals
-- [x] Create code with piezzos to detect a knock
-- [ ] Create frontend to received the notification from
-  - [x] Get a basic demo
-  - [ ] Vercel app with basic auth
-
-
 # Hardware
 
 ## Transmitter
@@ -45,5 +35,7 @@ Remote Doorbell: Hacking my doorbell into IoT
 
 # More info
 [How to work with 433MHZ Wireless](https://lastminuteengineers.com/433mhz-rf-wireless-arduino-tutorial/)
+
 [ESP32 Deep sleep](https://randomnerdtutorials.com/micropython-esp32-deep-sleep-wake-up-sources/)
+
 [Hacking a RF Doorbell](https://samy.pl/dingdong/)
