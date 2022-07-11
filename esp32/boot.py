@@ -26,7 +26,7 @@ station = network.WLAN(network.STA_IF)
 station.active(True)
 station.connect(ssid, password)
 
-print('Connecting', ssid, password)
+print('Connecting', ssid)
 
 
 while station.isconnected() == False:
@@ -34,10 +34,10 @@ while station.isconnected() == False:
 
   
 print('Connection successful')
-print("Hey");
 print(station.ifconfig())
 
 led.on()
+
 
 
 

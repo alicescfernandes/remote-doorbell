@@ -1,10 +1,9 @@
 import urequests
 from machine import Pin, ADC
-
 import time
 import os
 
-RECEIVER_PIN = 0
+RECEIVER_PIN = 34 # PIN 34 / GPIO15
 SIGNAL_TRESHOLD = 700
 BIT_PERIOD = 750
 board = os.uname().sysname
@@ -16,29 +15,16 @@ times = 0
 timeLastNotification = 0
 signal_recv_pin = None
 
-if board == 'esp32':
-  signal_recv_pin = ADC(Pin(34)) # Analog read on 34
-else:
-  signal_recv_pin = ADC(0)
+signal_recv_pin = ADC(Pin(RECEIVER_PIN)) # Analog read on 34/ pin15
 
 
-os_creds = open("onesignal_creds.txt", "r").split(";")
-
+os_creds = open("onesignal_creds.txt", "r").read().split(";");
 os_key = os_creds[0]
 os_app_id = os_creds[1]
 
-def notify(api_key):  
-  headers = {
-    "Authorization": "api_key="+api_key
-  }
-  
-  payload = "title=Your%20Title&message=Your%20Message&icon=http://yourwebsite.com/icon.png&url=https://yourwebsite.com"
-  
-  response = urequests.post("https://api.pushalert.co/rest/v1/send", data=payload, headers=headers)      
-  print(response.text)
   
 
-def notifyOneSignal(api_key):  
+def notifyOneSignal(api_key, os_app_id):
   headers = {
     "Authorization": "Basic " + api_key,
     "Content-Type": "application/json",
@@ -46,7 +32,7 @@ def notifyOneSignal(api_key):
   }
   
   payload = '{ "app_id": "'+os_app_id+'", "included_segments": ["Subscribed Users"], "contents": {"en": "Someone is at the door"}, "name": "INTERNAL_CAMPAIGN_NAME" }'
-
+  
   response = urequests.post("https://onesignal.com/api/v1/notifications", data=payload, headers=headers)      
   print(response.text)
   
@@ -63,7 +49,7 @@ def detectHigh():
   reading = signal_recv_pin.read()
   previousValue = currentValue
   currentValue = reading
-  
+
   # From low to high
   if(previousValue < SIGNAL_TRESHOLD and currentValue > SIGNAL_TRESHOLD):
     bitStartTime = time.ticks_us()
@@ -87,18 +73,14 @@ def detectHigh():
     timeInSeconds = timeDiff / 1000
     timeLastNotification = time.ticks_ms()
     times = 0
-    if(timeInSeconds > 15.0): # Needs to wait 15s between dings to trigger
+    if(timeInSeconds > 2.0): # Needs to wait 2s between dings to trigger
       print("Sending notification");
       # notifyOneSignal(onesignal_key)
   
 def loop():
-  print("running main");
+  print("running main")
   while True:
     detectHigh()
+    time.sleep(1);
     
 loop()
-
-
-
-
-
