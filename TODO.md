@@ -11,7 +11,7 @@
 
 
 # TODO (WEB)
-- [ ] Move repo into another repo
+- [ ] Move repo into another repo and use it as a submodule
 - [x] Move domain into alicescfernandes.pt
 - [ ] Create frontend for Web Push
   - [x] Get a basic demo
