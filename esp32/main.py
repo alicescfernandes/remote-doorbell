@@ -44,7 +44,7 @@ def notifyOwn():
       "Authorization": "Basic " + ring_creds,
   }
   
-  response = urequests.post("https://ring.alicescfernandes.pt", headers=headers)      
+  response = urequests.post("https://ring.alicescfernandes.pt/notify", headers=headers)      
   print(response.text)
   
   
