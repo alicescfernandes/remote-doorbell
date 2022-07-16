@@ -28,12 +28,23 @@ def notifyOneSignal(api_key, os_app_id):
   headers = {
     "Authorization": "Basic " + api_key,
     "Content-Type": "application/json",
-    "Aceppt": "application/json"
+    "Accept": "application/json"
   }
   
   payload = '{ "app_id": "'+os_app_id+'", "included_segments": ["Subscribed Users"], "contents": {"en": "Someone is at the door"}, "name": "INTERNAL_CAMPAIGN_NAME" }'
   
   response = urequests.post("https://onesignal.com/api/v1/notifications", data=payload, headers=headers)      
+  print(response.text)
+  
+
+def notifyOwn():
+  ring_creds = open("ring_creds.txt", "r").read()
+
+  headers = {
+      "Authorization": "Basic " + ring_creds,
+  }
+  
+  response = urequests.post("https://ring.alicescfernandes.pt", headers=headers)      
   print(response.text)
   
   
