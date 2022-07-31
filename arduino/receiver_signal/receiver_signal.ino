@@ -1,6 +1,6 @@
-#define RECEIVER_PIN A0
+#define RECEIVER_PIN A2
 #define RECEIVER_PIN_2 3
-#define SIGNAL_TRESHOLD 700
+#define SIGNAL_TRESHOLD 50
 #define BIT_PERIOD 750
 
 int previousValue = 0;
@@ -20,7 +20,7 @@ void setup() {
 
 void detectHigh(){
   int reading = analogRead(RECEIVER_PIN);
-  
+  Serial.println(reading);
   previousValue = currentValue;
   currentValue = reading;
   
@@ -33,7 +33,7 @@ void detectHigh(){
     bitStartTime = micros();
     counting = false;
   
-    if(calculatedBitPeriod > BIT_PERIOD - 80  and calculatedBitPeriod < BIT_PERIOD + 80  ){
+    if(calculatedBitPeriod > BIT_PERIOD - 50  and calculatedBitPeriod < BIT_PERIOD + 50  ){
        times = times +1;
     }else{
       times = 0;
@@ -46,7 +46,7 @@ void detectHigh(){
     float timeInSeconds = timeDiff / 1000;
     timeLastNotification = millis();
     times = 0;
-    if(timeInSeconds > 15.0){ // Needs to wait 15s between dings to trigger
+    if(timeInSeconds > 0.0){ // Needs to wait 15s between dings to trigger
       Serial.println("ring ring");
     }
     

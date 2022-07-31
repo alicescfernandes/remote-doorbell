@@ -1,8 +1,8 @@
-#define TX_PIN 7
+#define TX_PIN 8
 #define BIT_PERIOD 750
 #define TIMES 23
 #define PIEZO_PIN A5
-#define THRESHOLD 40
+#define THRESHOLD 500
 unsigned long GRACE_PERIOD = 3000; // 3 seconds between knocks
 
 // here's an array (in seconds) where each "1" begins in the signal
@@ -38,7 +38,7 @@ void setup(){
 
 void loop(){
   int piezo_read = analogRead(PIEZO_PIN); 
-  
+  Serial.println(piezo_read);
   // Perform notification of the bell
   if(piezo_read >= THRESHOLD){
     unsigned long currentMillis = millis();

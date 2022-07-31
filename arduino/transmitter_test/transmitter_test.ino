@@ -1,4 +1,4 @@
-#define TX_PIN 7
+#define TX_PIN 6
 #define BIT_PERIOD 750
 #define TIMES 18
 

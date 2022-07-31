@@ -1,12 +1,11 @@
-#define RECEIVER_PIN 34
+#define RECEIVER_PIN A2
 
 
 void setup() {
   // initialize serial communication at 115200 bits per second:
-  Serial.begin(115200);
-  
+  Serial.begin(9600);
+ 
   //set the resolution to 12 bits (0-4096)
-  analogReadResolution(12);
   pinMode(RECEIVER_PIN, INPUT);
 }
 

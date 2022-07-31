@@ -4,7 +4,7 @@ import time
 import os
 
 RECEIVER_PIN = 34 # PIN 34 / GPIO15
-SIGNAL_TRESHOLD = 700
+SIGNAL_TRESHOLD = 800
 BIT_PERIOD = 750
 board = os.uname().sysname
 previousValue = 0
@@ -13,8 +13,6 @@ bitStartTime = 0
 counting = False
 times = 0
 timeLastNotification = 0
-signal_recv_pin = None
-
 signal_recv_pin = ADC(Pin(RECEIVER_PIN)) # Analog read on 34/ pin15
 
 
@@ -38,6 +36,7 @@ def notifyOneSignal(api_key, os_app_id):
   
 
 def notifyOwn():
+  print("notify user")
   ring_creds = open("ring_creds.txt", "r").read()
 
   headers = {
@@ -60,8 +59,8 @@ def detectHigh():
   reading = signal_recv_pin.read()
   previousValue = currentValue
   currentValue = reading
-
-  # From low to high
+ 
+ # From low to high
   if(previousValue < SIGNAL_TRESHOLD and currentValue > SIGNAL_TRESHOLD):
     bitStartTime = time.ticks_us()
     counting = True
@@ -71,27 +70,28 @@ def detectHigh():
     calculatedBitPeriod = time.ticks_us() - bitStartTime
     bitStartTime = time.ticks_us()
     counting = False
-    print(calculatedBitPeriod)
-    if(calculatedBitPeriod > BIT_PERIOD - 50  and calculatedBitPeriod < BIT_PERIOD + 50  ):
+    if(calculatedBitPeriod > BIT_PERIOD - 20  and calculatedBitPeriod < BIT_PERIOD + 20  ):
       times = times +1
     else:
       times = 0
       
     
   # Detect ringing and trigger notification
-  if(times >= 3):
+  if(times >= 7):
     timeDiff = time.ticks_diff(time.ticks_ms(), timeLastNotification)
     timeInSeconds = timeDiff / 1000
     timeLastNotification = time.ticks_ms()
     times = 0
     if(timeInSeconds > 2.0): # Needs to wait 2s between dings to trigger
       print("Sending notification");
-      # notifyOneSignal(onesignal_key)
+      notifyOwn()
+  
   
 def loop():
   print("running main")
   while True:
-    detectHigh()
-    time.sleep(1);
+      break_loop = detectHigh()
+
+      
     
 loop()
