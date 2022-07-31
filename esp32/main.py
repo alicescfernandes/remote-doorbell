@@ -15,26 +15,6 @@ times = 0
 timeLastNotification = 0
 signal_recv_pin = ADC(Pin(RECEIVER_PIN)) # Analog read on 34/ pin15
 
-
-os_creds = open("onesignal_creds.txt", "r").read().split(";");
-os_key = os_creds[0]
-os_app_id = os_creds[1]
-
-  
-
-def notifyOneSignal(api_key, os_app_id):
-  headers = {
-    "Authorization": "Basic " + api_key,
-    "Content-Type": "application/json",
-    "Accept": "application/json"
-  }
-  
-  payload = '{ "app_id": "'+os_app_id+'", "included_segments": ["Subscribed Users"], "contents": {"en": "Someone is at the door"}, "name": "INTERNAL_CAMPAIGN_NAME" }'
-  
-  response = urequests.post("https://onesignal.com/api/v1/notifications", data=payload, headers=headers)      
-  print(response.text)
-  
-
 def notifyOwn():
   print("notify user")
   ring_creds = open("ring_creds.txt", "r").read()
