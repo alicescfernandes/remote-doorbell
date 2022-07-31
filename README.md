@@ -6,7 +6,7 @@ Remote Doorbell: Hacking my doorbell into IoT
 ### Parts List
 - Seeeduino XIAO SAMD21
 - Piezo + 1M ohm resistor
-- 433 MHZ Transmitter
+- 433 MHZ Transmitter (Whadda Makers)
 - Battery Pack
 
 ## Receiver
