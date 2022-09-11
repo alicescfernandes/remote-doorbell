@@ -1,3 +1,6 @@
+# Main code
+# Compatible with any ESP32 device
+
 import urequests
 from machine import Pin, ADC
 import time

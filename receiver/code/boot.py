@@ -1,11 +1,11 @@
-import socket
- 
+# Boot code
+# Compatible with any ESP32 device
+
 from machine import Pin
 import network
 
 import esp
 esp.osdebug(None)
-import ssl
 import gc
 gc.collect()
 
@@ -27,7 +27,6 @@ station.active(True)
 station.connect(ssid, password)
 
 print('Connecting', ssid)
-
 
 while station.isconnected() == False:
   pass
