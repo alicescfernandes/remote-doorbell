@@ -19,7 +19,11 @@ The doorbell system uses a OOK/ASK signal type, which means that there's only re
 
 In order to capture the "original" signal from the doorbell system, i used a RTLSDR and Universal Radio Hacker to detect and capture the bits and bit period, then with the help of some other code and arduino its possible to control a 433mhz transmitter to send that same signal. To send the values i just need to set the arduino pin to HIGH/LOW for some microseconds. The 433mhz transmitter then sends the signal with the carrier wave by itself.
 
-On the receiver end, a ESP32 and a 433mhz receiver should be enough to read the 4333mhz range. The module i'm using decodes the signal for me, and returns only the bit value, so the pin is either HIGH/LOW during a couple of microseconds. And because a ESP32 has wifi built-in, i can call any endpoint without exposing my device on the public internet.
+On the receiver end, a ESP32 and a 433mhz receiver should be enough to read the 4333mhz range. The module i'm using decodes the signal for me, and returns only the bit value, so the pin is either HIGH/LOW during a couple of microseconds. And because a ESP32 has wifi built-in, i can call any endpoint without exposing my device on the public internet. So i created a python service that the ESP can call whenever it wants, and that server will then send the notifications to my phone (see images below).
+
+![The San Juan Mountains are beautiful!](/requests.png "San Juan Mountains")
+![The San Juan Mountains are beautiful!](/pushes.png "San Juan Mountains")
+
 
 ## Hardware
 
